@@ -84,3 +84,33 @@ input {
   display: flex;
   flex-direction: column;
 }
+
+.signModal {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modalContent {
+  background-color: #cbd5e0;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #222;
+  border-radius:  0.250rem;
+  width: 80%;
+
+  input {
+    margin: 10px;
+  }
+}
+
+.privateKeyInput {
+  width: 90%;
+}
