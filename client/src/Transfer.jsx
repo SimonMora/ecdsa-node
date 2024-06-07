@@ -9,14 +9,13 @@ function Transfer({ address, setBalance }) {
   const [recipient, setRecipient] = useState("");
   const [privateKey, setPrivateKey] = useState("");
   
-  const [canSubmit, setCanSubmit] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [signedTransaction, setSignedTransaction] = useState("");
 
   const setValue = (setter) => (evt) => setter(evt.target.value);
 
   async function transfer(evt) {
     evt.preventDefault();
-    console.log(signedTransaction);
 
     try {
       const {
@@ -30,10 +29,7 @@ function Transfer({ address, setBalance }) {
         }
       );
       setBalance(balance);
-      setSendAmount("");
-      setRecipient("");
-      setPrivateKey("");
-      setCanSubmit(true);
+      cleanFields();
     } catch (ex) {
       alert(ex.response.data.message);
     }
@@ -47,6 +43,13 @@ function Transfer({ address, setBalance }) {
   function closeModal() {
     const modal = document.getElementById("signModal");
     modal.style.display = "none";
+  }
+
+  function cleanFields() {
+    setSendAmount("");
+    setRecipient("");
+    setPrivateKey("");
+    setButtonDisabled(true);
   }
 
   window.addEventListener("keydown", (event) => {
@@ -67,11 +70,12 @@ function Transfer({ address, setBalance }) {
       const signedTransaction = secp256k1.sign(hashedTransaction, privateKey);
 
       setSignedTransaction(signedTransaction.toDERHex());
-      setCanSubmit(false);
+      setButtonDisabled(false);
       closeModal();
     } catch (error) {
       alert(error);
       closeModal();
+      cleanFields();
     }
     
   }
@@ -99,7 +103,7 @@ function Transfer({ address, setBalance }) {
           ></input>
         </label>
         <button type="button" className="button" onClick={() => showModal()}>Sign Transaction</button>
-        <button type="submit" className="button" disabled={canSubmit}>Transfer</button>
+        <button type="submit" className="button" disabled={buttonDisabled}>Transfer</button>
       </form>
       
       <div id="signModal" className="signModal">
